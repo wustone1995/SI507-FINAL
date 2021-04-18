@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>welcome</title>
+</head>
+<body>
+    <h1>
+        Welcome!
+    </h1>
+    <h2>
+        This is a simple book infomation search engine.
+    </h2>
+    <p>
+      Here, you can search book as a reader.<br>
+      Or you can review the book trends.<br>
+    </p>
+    <form action="/handle_form" method="POST">
+      <p>
+        What can I help you?
+        <select name='searchorreview'>
+          <option value="search">Book Search</option>
+          <option value="review">Trends review</option>
+        </select>
+      </p>
+      <input type="submit" value="Confirm"></input>
+    </form>
+</body>
+</html>

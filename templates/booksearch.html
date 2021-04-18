@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8"/>
+    <title>HTML Forms Demo</title>
+</head>
+<body>
+    <h1>Book Search</h1><br/><br/><br/>
+    
+    <form action="/book_search" method="POST">
+        <p>
+            Which kind of books you are looking for: <input name="category" type="text"/><br/><br/><br/>
+            What's the size limit(万字): <br/>
+            (minimum)<input name="sizebottom"/>---<input name="sizetop"/>(maximum)<br/><br/>
+        </p>
+        <input type="submit" value="Confirm"></input>
+    </form>
+    {% if result_flag==1 %}
+        <p>It's ok!</p>
+    {% endif %}
+        
+</body>
+</html>
