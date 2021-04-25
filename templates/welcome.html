@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>welcome</title>
+  <title>Welcome</title>
 </head>
 <body>
     <h1>
@@ -18,10 +18,32 @@
     <form action="/handle_form" method="POST">
       <p>
         What can I help you?
-        <select name='searchorreview'>
+        <select name='searchorreview' id="degree1">
           <option value="search">Book Search</option>
-          <option value="review">Trends review</option>
+          <option value="review">Trends Review</option>
         </select>
+
+        <select name='trends' id="degree2" style="display:None" value="trends1"></select>
+        <script type="text/javascript">
+          var select = document.getElementById("degree1");
+          select.onchange=function(){
+              var selvalue = select.value;
+              var val = document.getElementById("degree2");
+              switch(selvalue){
+                  case "search" : val.style["display"]="None";break;
+                  case "review" : 
+                      val.style["display"]="";
+                      val.innerHTML="<option value='trends1'>Top 20 books</option>"+
+                                    "<option value='trends2'>Type distribution within some period</option>"+
+                                    "<option value='trends3'>Size change among types</option>";
+                      break;
+                  default : alert("error");
+              }
+          };
+        </script>
+
+
+
       </p>
       <input type="submit" value="Confirm"></input>
     </form>

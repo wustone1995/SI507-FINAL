@@ -4,6 +4,19 @@ from crawl_youdu import *
 from crawl_zongheng import *
 
 def get_all_books(website):
+    ''' a function that gets all the book infos on one website 
+
+    Parameters
+    ----------
+    website: string
+        the name of the website  
+
+    Returns
+    -------
+    book_all: list
+        the list of book instance with retrived infos
+    '''
+
     if website == 'qidian':
         pages = get_pages_qidian()
     if website == 'zongheng':
@@ -27,6 +40,18 @@ def get_all_books(website):
     return books_all
 
 def create_database(dir):
+    ''' a function that create the empty database 
+
+    Parameters
+    ----------
+    dir: string
+        the directory of the database  
+
+    Returns
+    -------
+    None
+    '''
+
     conn = sqlite3.connect(dir)
     cursor = conn.cursor()
     drop_namelist = '''
@@ -61,24 +86,20 @@ def create_database(dir):
     cursor.execute(create_infos)        
     conn.commit()
 
-# def insert(dir, website):
-#     conn = sqlite3.connect(dir)
-#     cursor = conn.cursor()
-#     books_all = get_all_books(website)
-#     for b in books_all:
-#         insert = f'''
-#             INSERT INTO {website}
-#             VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)
-#         '''
-#         if b.like[-1] == '万':
-#             blike = float(b.like[:-1])*10000
-#         else:
-#             blike = float(b.like)
-#         bsize = float(b.size[:-1])
-#         book_info = [b.name, bsize, b.category, b.date, blike, b.description, b.url]
-#         cursor.execute(insert, book_info)
-#         conn.commit()
 def insert(dir, website):
+    ''' a function that inserts the book infos to database 
+
+    Parameters
+    ----------
+    dir: string
+        the directory to the database
+    website: string
+        the name of website 
+
+    Returns
+    -------
+    None
+    '''
     conn = sqlite3.connect(dir)
     cursor = conn.cursor()
     books_all = get_all_books(website)
@@ -93,7 +114,7 @@ def insert(dir, website):
             blike = float(b.like)
         bsize = float(b.size[:-1])
         book_name = [b.name]
-        book_info = [bsize, b.category, b.date, blike, b.description, b.url, website]
+        book_info = [bsize, b.category, b.date, int(blike), b.description, b.url, website]
         cursor.execute(insert, book_name)
         conn.commit()
 
@@ -105,15 +126,14 @@ def insert(dir, website):
         conn.commit()
 
 
-if __name__ == "__main__":
-    dir = r'C:\\Users\\wyfdr\\Desktop\\graduatestudy\\SI507\\HW\\FINAL\\final.sqlite'
-    create_database(dir)
-    insert(dir, "qidian")
-    print('create_database qidian done')
-    # create_database(dir,"zongheng")
-    insert(dir, "zongheng")
-    print('create_database zongheng done')
-    # create_database(dir,"youdu")
-    insert(dir, "youdu")
-    print('create_database youdu done')
-    print('done')
+# if __name__ == "__main__":
+#     dir = 'final.sqlite'
+#     create_database(dir)
+
+#     insert(dir, "qidian")
+#     print('create_database qidian done')
+#     insert(dir, "zongheng")
+#     print('create_database zongheng done')
+#     insert(dir, "youdu")
+#     print('create_database youdu done')
+#     print('done')

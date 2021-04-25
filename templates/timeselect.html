@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8"/>
+    <title>Time Select</title>
+</head>
+<body>
+    <h1>Trend2 time select</h1>
+    <form action="/trends2" method="POST">
+        <h2>Which part of time period do you want to see:</h2>
+        <p>
+            <input type="month" value="2009-12" name="timebottom"/> to <input type="month" value="2009-12" name="timetop"/><br/><br/><br/>
+        </p>
+        <h2>Please select the time scale:</h2>
+        <p>
+            <select name='timescale'>
+                <option value="year">year</option>
+                <option value="quarter">quarter</option>
+                <option value="month">month</option>
+            </select>
+        </p>      
+        <input type="submit" value="Confirm"></input><br/><br/>
+    </form>
+    <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+       
+</body>
+</html>

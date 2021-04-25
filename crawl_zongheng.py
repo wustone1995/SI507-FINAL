@@ -7,27 +7,20 @@ import time
 from basic_functions import *
 
 def get_pages_zongheng():
-    # if cache_file is None:
-    #     print('Fetching')
-    #     ## Make the soup of zongheng
-    #     pages_zongheng = {}
-    #     for i in range(1,7):
-    #         page_url = f'http://book.zongheng.com/store/c0/c0/b0/u0/p{i}/v9/s1/t0/u0/i0/ALL.html'
-    #         headers = {'User-Agent': 'UMSI 507 Course Project',
-    #                 'From': 'yuanfenw@umich.edu',
-    #                 'Course-Info': 'https://www.si.umich.edu/programs/courses/507'} 
-    #         response = requests.get(page_url, headers=headers)
-    #         pages_zongheng[page_url] = response.text
-    #     cache_save('cache.json', 'pages_zongheng', pages_zongheng)
-    #     return pages_zongheng
-    # else:
-    #     print('Using cache')
-    #     if not os.path.exists(cache_file):
-    #         print("[ERROR] Please check the cache file.")
-    #     else:
-    #         cache = cache_read(cache_file)
-    #         pages_zongheng = cache['pages_zongheng']
-    #         return pages_zongheng
+    ''' a function that gets the page urls
+
+    This function gets the urls of the main pages which list the books
+
+    Parameters
+    ----------
+    None   
+
+    Returns
+    -------
+    pages_zongheng: list
+        a list of main page urls
+    '''
+
     pages_zongheng = []
     for i in range(1,7):
         page_url = f'http://book.zongheng.com/store/c0/c0/b0/u0/p{i}/v9/s1/t0/u0/i0/ALL.html'
@@ -35,6 +28,19 @@ def get_pages_zongheng():
     return pages_zongheng
 
 def get_books_zongheng(page_url):
+    ''' a function that gets the books' infos on one main page
+
+    Parameters
+    ----------
+    page_url: string
+        the url of the main page   
+
+    Returns
+    -------
+    booklist: list
+        a list of the retrived book
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()
@@ -76,6 +82,21 @@ def get_books_zongheng(page_url):
 
 
 def cal_date(update_date, current_date):
+    ''' a function that calculates the date  
+
+    Parameters
+    ----------
+    update_date: string
+        the completed time of the book
+    current_date: string
+        the current time   
+
+    Returns
+    -------
+    res: string
+        the transfered time (e.g. 2014-05-16)
+    '''
+
     if update_date[-1] != '前':
         return update_date
     else:
@@ -95,6 +116,19 @@ def cal_date(update_date, current_date):
         return res
 
 def get_bookdetail_zongheng(book_url):
+    ''' a function that gets the book infos  
+
+    Parameters
+    ----------
+    book_url: string
+        the url of the book page  
+
+    Returns
+    -------
+    book: Book
+        a book instance with retrived infos
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()
@@ -126,14 +160,3 @@ def get_bookdetail_zongheng(book_url):
     book = Book(book_label, book_name, book_size, book_description, book_date, book_like, book_url)
     return book
 
-# pages_zongheng = get_pages_zongheng()
-# count = 0
-# for i in pages_zongheng:
-#     if count == 0:
-#         count = 1
-#         continue
-#     url = i
-#     book = get_books_zongheng(url)
-#     for i in book:
-#         print(i.info())
-#     break

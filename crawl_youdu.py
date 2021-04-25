@@ -5,26 +5,20 @@ import json
 from basic_functions import *
 
 def get_pages_youdu():
-    # cache_flag = 0
-    # if os.path.exists('cache.json'):
-    #     cache = cache_read(cache_file)
-    #     if 'pages_youdu' in cache:
-    #         print("Using cache")
-    #         pages_youdu = cache['pages_youdu']
-    #         cache_flag = 1
-    # if cache_flag == 0:
-    #     print('Fetching')
-    #     ## Make the soup of youdu
-    #     baseurl = "https://www.youdubook.com"
-    #     listurl = '/booklibrary/index/str/0_0_0_0_0_2_0'
-    #     url = baseurl + listurl
-    #     pages_youdu = {}
-    #     for i in range(1,9):    # there are page 1-8
-    #       para_dict = {'page': str(i)}
-    #       response = requests.get(url, para_dict)
-    #       page_url = url + '?page=' + str(i) 
-    #       pages_youdu[page_url] = response.text
-    #     cache_save('cache.json', 'pages_youdu', pages_youdu)
+    ''' a function that gets the page urls
+
+    This function gets the urls of the main pages which list the books
+
+    Parameters
+    ----------
+    None   
+
+    Returns
+    -------
+    pages_youdu: list
+        a list of main page urls
+    '''
+
     baseurl = "https://www.youdubook.com"
     listurl = '/booklibrary/index/str/0_0_0_0_0_2_0'
     url = baseurl + listurl
@@ -35,6 +29,19 @@ def get_pages_youdu():
     return pages_youdu
     
 def get_books_youdu(page_url):
+    ''' a function that gets the books' infos on one main page
+
+    Parameters
+    ----------
+    page_url: string
+        the url of the main page   
+
+    Returns
+    -------
+    booklist: list
+        a list of the retrived book
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()
@@ -79,6 +86,19 @@ def get_books_youdu(page_url):
     return booklist
 
 def get_bookdetail_youdu(book_url):
+    ''' a function that gets the book infos  
+
+    Parameters
+    ----------
+    book_url: string
+        the url of the book page  
+
+    Returns
+    -------
+    book: Book
+        a book instance with retrived infos
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()

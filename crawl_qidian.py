@@ -7,33 +7,39 @@ from fontTools.ttLib import TTFont
 from basic_functions import *
 
 def get_pages_qidian():
-    # cache_flag = 0
-    # if os.path.exists('cache.json'):
-    #     cache = cache_read(cache_file)
-    #     if 'pages_qidian' in cache:
-    #         print("Using cache")
-    #         pages_qidian = cache['pages_qidian']
-    #         cache_flag = 1
-    # if cache_flag == 0:
-    #     print('Fetching')
-    #     page_url1 = 'https://www.qidian.com/finish?action=hidden&orderId=&style=2&pageSize=50&siteid=1&pubflag=0&hiddenField=2&page=1'
-    #     page_url2 = 'https://www.qidian.com/finish?action=hidden&orderId=&style=2&pageSize=50&siteid=1&pubflag=0&hiddenField=2&page=2'
-    #     pages_qidian = {}
-    #     headers = {'User-Agent': 'UMSI 507 Course Project',
-    #               'From': 'yuanfenw@umich.edu',
-    #               'Course-Info': 'https://www.si.umich.edu/programs/courses/507'} 
-    #     response1 = requests.get(page_url1, headers=headers)
-    #     pages_qidian[page_url1] = response1.text
-    #     response2 = requests.get(page_url2, headers=headers)
-    #     pages_qidian[page_url2] = response2.text
-    #     cache_save('cache.json', 'pages_qidian', pages_qidian)
-    # return pages_qidian
+    ''' a function that gets the page urls
+
+    This function gets the urls of the main pages which list the books
+
+    Parameters
+    ----------
+    None   
+
+    Returns
+    -------
+    pages_qidian: list
+        a list of main page urls
+    '''
+
     page_url1 = 'https://www.qidian.com/finish?action=hidden&orderId=&style=2&pageSize=50&siteid=1&pubflag=0&hiddenField=2&page=1'
     page_url2 = 'https://www.qidian.com/finish?action=hidden&orderId=&style=2&pageSize=50&siteid=1&pubflag=0&hiddenField=2&page=2'
     pages_qidian = [page_url1, page_url2]
     return pages_qidian
     
 def get_books_qidian(page_url):
+    ''' a function that gets the books' infos on one main page
+
+    Parameters
+    ----------
+    page_url: string
+        the url of the main page   
+
+    Returns
+    -------
+    booklist: list
+        a list of the retrived book
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()
@@ -74,6 +80,19 @@ def get_books_qidian(page_url):
     return booklist
 
 def number_transfer_qidian(response):
+    ''' a function that transfers the unreadable number to readable  
+
+    Parameters
+    ----------
+    response: string
+        the original response retrivied   
+
+    Returns
+    -------
+    html_page: string
+        the transfered page content
+    '''
+
     font_url = re.findall("; src: url\('(.*?)'\) format", response.text)[1]
     headers = {'User-Agent': 'UMSI 507 Course Project',
                   'From': 'yuanfenw@umich.edu',
@@ -92,6 +111,19 @@ def number_transfer_qidian(response):
     return html_page
 
 def get_bookdetail_qidian(book_url):
+    ''' a function that gets the book infos  
+
+    Parameters
+    ----------
+    book_url: string
+        the url of the book page  
+
+    Returns
+    -------
+    book: Book
+        a book instance with retrived infos
+    '''
+
     cache_flag = 0
     if os.path.exists('cache.json'):
         cache = cache_read()

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          text-align:center;
+        }
+        </style>
+    <meta charset="utf8"/>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.2/dist/echarts.min.js"></script>
+    <title>Trends review</title>
+</head>
+<body>
+    {% if trend=="trends1" %}
+        <h1>Trend1 Review</h1>
+        <h2>The top 20 most popular books on Qidian, Zongheng and Youdu</h2>
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+        <p>{% for i in range(3) %}
+                <table style="width:100%" table-layout:fixed;>
+                    <tr>
+                        <th style="width:15%">Name</th>
+                        <th style="width:5%">Size(万字)</th>
+                        <th style="width:5%">Category</th>
+                        <th style="width:10%">Date</th>
+                        <th style="width:5%">Like</th>
+                        <th style="width:5%">Source</th>
+                        <th style="width:55%" rowspan="21">
+                            {% if i == 2 %}
+                                <div id={{i}} style="width: 800px;height:500px;"></div> 
+                                <script type="text/javascript">
+                                    var myChart = echarts.init(document.getElementById('{{i|tojson}}'));
+                                    var index = {{i|tojson}};
+                                    var option = {
+                                        grid: {  
+                                        left: '10%',  
+                                        bottom: '20%'  
+                                        }, 
+                                        title: {
+                                            text: 'Type distribution on Youdu',
+                                            x:'center',
+                                            y:'top',
+                                        },
+                                        tooltip: {},
+                                        legend: {
+                                            data:['Count'],
+                                            x:'right',
+                                            y:'top',
+                                        },
+                                        xAxis: {
+                                            name: 'type',
+                                            data: {{category_status[i*2]|tojson}},
+                                            axisLabel:
+                                            {
+                                                interval: 0,
+                                                rotate: 40
+                                            }         
+                                        },
+                                        yAxis: {
+                                            name: 'count'
+                                        },
+                                        series: [{
+                                            name: 'Count',
+                                            type: 'bar',
+                                            data:  {{category_status[i*2+1]|tojson}}   
+                                        }]
+                                    };
+                                    myChart.setOption(option);
+                                </script>
+                            {% else %}
+                            <div id={{i}} style="width: 800px;height:500px;"></div> 
+                            <script type="text/javascript">
+                                var myChart = echarts.init(document.getElementById({{i|tojson}}));
+                                var index = {{i|tojson}};
+                                var option = {
+                                    tooltip: {},
+                                    legend: {
+                                        data:['Count'],
+                                        x:'right',
+                                        y:'top',
+                                    },
+                                    xAxis: {
+                                        name: 'type',
+                                        data: {{category_status[i*2]|tojson}},
+                                        axisLabel:
+                                        {
+                                            interval: 0,
+                                            formatter: function (value) 
+                                                {
+                                                    var str = value.split("");
+                                                    return str.join("\n");
+                                                }
+                                        }         
+                                    },
+                                    yAxis: {
+                                        name: 'count'
+                                    },
+                                    series: [{
+                                        name: 'Count',
+                                        type: 'bar',
+                                        data:  {{category_status[i*2+1]|tojson}}   
+                                    }]
+                                };
+                                option.title = 
+                                        {
+                                            text: 'Type distribution on Qidian',
+                                            x:'center',
+                                            y:'top',    
+                                    };
+                                    option.title = {
+                                            text: 'Type distribution on Zongheng',
+                                            x:'center',
+                                            y:'top',
+                                        };
+                                if ({{i}}==0){
+                                    option.title = 
+                                        {
+                                            text: 'Type distribution on Qidian',
+                                            x:'center',
+                                            y:'top',    
+                                    };
+                                }
+                                else{
+                                    option.title = {
+                                            text: 'Type distribution on Zongheng',
+                                            x:'center',
+                                            y:'top',
+                                        };
+                                    };
+                                myChart.setOption(option);
+                            </script>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    {% for book in result[i*20:i*20+20] %}
+                    <tr>
+                        <td><a href="{{book[6]}}" target="_blank" style="text-decoration: none;" >{{book[0]}}</a></td>
+                        <td>{{book[1]}}</td>
+                        <td>{{book[2]}}</td>
+                        <td>{{book[3]}}</td>
+                        <td>{{book[4]}}</td>
+                        <td>{{book[5]}}</td>
+                    </tr>
+                {% endfor %}
+                </table><br/><br/>
+            {% endfor %}
+        </p>
+    {% elif trend=="trends2" %}
+        <h1>Trend2 Review</h1>
+        {% if num_category == 0 %}
+        <h2>No results found.</h2>
+        <input type="button" value="Back" onclick="javascript:history.back();">
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+        {% else %}
+        <input type="button" value="Back" onclick="javascript:history.back();">
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+        <div id="main" style="width: 800px;height:500px;"></div> 
+        <script type="text/javascript">
+            let series_data = {list:[]}
+            for (i=0;i<{{num_category|tojson}};i++){
+                series_data.list.push({ type: 'bar', stack: '总量', name: {{source[0]|tojson}}[i+1]})
+            }
+            var myChart = echarts.init(document.getElementById("main"));
+            var option ={
+                    title: {
+                        text: 'Type distribution',
+                        x:'center',
+                        y:'top',
+                    },
+                    grid: {bottom: '30%'},
+                    xAxis: {
+                        type: 'category',
+                        axisLabel:{
+                            interval: 0,
+                            formatter: function (value) {
+                                var str = value.split("");
+                                return str.join("\n");
+                            }
+                        } 
+                    },
+                    yAxis: {},
+                    legend: {x:'right', y:'top', show: true, top: "6%"},
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        } 
+                    },
+                    dataset: {
+                        source: {{source|tojson}}
+                    },
+                    series: series_data.list
+                };
+                myChart.setOption(option);
+        </script>
+        {% endif %}
+    {% else %}
+        <h1>Trend3 Review</h1>
+        <h2>The size distribution among different type of books:</h2><br/><br/>
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'"><br/>
+        <div id="main1" style="width: 1000px;height:500px;"></div> 
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById("main1"));
+            var option = {
+                    grid: {left: '20%'}, 
+                    title: {
+                        text: 'Size distribution of Zongheng',
+                        x:'center',
+                        y:'top',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        } 
+                    },
+                    legend: {x:'right',y:'top'},
+                    xAxis: {type: 'category',   
+                        data: {{infos[0]|tojson}},   
+                        name: 'type',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        },
+                        axisLabel:
+                            {
+                                interval: 0,
+                                formatter: function (value) 
+                                    {
+                                        var str = value.split("");
+                                        return str.join("\n");
+                                    }
+                            } 
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'size(万字)',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Size',
+                            data: {{infos[1]|tojson}},
+                            type: 'line'
+                        }
+                    ]
+                };
+            myChart.setOption(option);
+        </script>
+        <br/><br/>
+        <div id="main2" style="width: 1000px;height:500px;"></div> 
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById("main2"));
+            var option = {
+                    grid: {left: '20%'}, 
+                    title: {
+                        text: 'Size distribution of Qidian',
+                        x:'center',
+                        y:'top',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        } 
+                    },
+                    legend: {x:'right',y:'top'},
+                    xAxis: {type: 'category',   
+                        data: {{infos[2]|tojson}},   
+                        name: 'type',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        },
+                        axisLabel:
+                            {
+                                interval: 0,
+                                formatter: function (value) 
+                                    {
+                                        var str = value.split("");
+                                        return str.join("\n");
+                                    }
+                            } 
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'size(万字)',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Size',
+                            data: {{infos[3]|tojson}},
+                            type: 'line'
+                        }
+                    ]
+                };
+            myChart.setOption(option);
+        </script>
+        <br/><br/>
+        <div id="main3" style="width: 1000px;height:500px;"></div> 
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById("main3"));
+            var option = {
+                    grid: {left: '20%'},
+                    title: {
+                        text: 'Size distribution of Youdu',
+                        x:'center',
+                        y:'top',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        } 
+                    },
+                    legend: {x:'right',y:'top'},
+                    xAxis: {type: 'category',   
+                        data: {{infos[4]|tojson}},   
+                        name: 'type',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        },
+                        axisLabel:
+                            {
+                                interval: 0,
+                                formatter: function (value) 
+                                    {
+                                        var str = value.split("");
+                                        return str.join("\n");
+                                    }
+                            } 
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'size(万字)',   
+                        nameTextStyle: {
+                            fontWeight: 600,
+                            fontSize: 18
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Size',
+                            data: {{infos[5]|tojson}},
+                            type: 'line'
+                        }
+                    ]
+                };
+            myChart.setOption(option);
+        </script>
+    {% endif %}
+        
+    
+
+        
+</body>
+</html>

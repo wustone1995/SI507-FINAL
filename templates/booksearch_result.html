@@ -1,16 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          text-align:center;
+        }
+        </style>
     <meta charset="utf8"/>
-    <title>HTML Forms Demo</title>
+    <title>Book Search Results</title>
 </head>
 <body>
     <h1>Book Search</h1>
-    <h2>Results:</h2>
-    <p>Category: {{category}}</p>
-    <p>Size: {{sizebottom}} to {{sizetop}}</p><br/><br/><br/>
-    
-    
+    <h2>Filters:</h2>
+    <p>Specified Category: {{filters[0]}}</p>
+    <p>Size: {{filters[1]}} to {{filters[2]}} 万字</p>
+    {% if status == 0 %}
+    <h2>Results:
+        <input type="button" value="Search again" onclick="javascript:history.back();">
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+    </h2>
+    <table style="width:100%" table-layout:fixed;>
+        <tr>
+            <th style="width:3%">Index</th>
+            <th style="width:15%">Name</th>
+            <th style="width:5%">Size(万)</th>
+            <th style="width:5%">Category</th>
+            <th style="width:10%">Date</th>
+            <th style="width:5%">Like</th>
+            <th style="width:5%">Source</th>
+            <th style="width:52%">Description</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{book[8]}}</td>
+                <td><a href="{{book[6]}}" target="_blank" style="text-decoration: none;">{{book[0]}}</a></td>
+                <td>{{book[1]}}</td>
+                <td>{{book[2]}}</td>
+                <td>{{book[3]}}</td>
+                <td>{{book[4]}}</td>
+                <td>{{book[5]}}</td>
+                <td style="text-align: left;">{{book[7]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% elif status == 1 %}
+        <h2>Please check your input about size.</h2>
+        <input type="button" value="Search again" onclick="javascript:history.back();">
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+    {% else %}
+        <h2>Book Not Found.</h2>
+        <input type="button" value="Search again" onclick="javascript:history.back();">
+        <input type="button" value="Main page" onclick="javascript:window.location.href='http://localhost:5000/'">
+    {% endif %}
         
 </body>
 </html>
